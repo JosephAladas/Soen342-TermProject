@@ -2,7 +2,7 @@
 Software Requirements and Deployment Fall 2024 Section H
 
 ### Team Members
-- [Joseph Aladas - 40156616  ]
+- [Joseph Aladas - 40156616](https://github.com/JosephAladas)
 - [Adam Tahle -   ]
 
 ### Project Description
