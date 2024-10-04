@@ -2,8 +2,8 @@
 Software Requirements and Deployment Fall 2024 Section H
 
 ### Team Members
-Joseph Aladas 40156616
-Adam Tahle 
+- [Joseph Aladas - 40156616  ]
+- [Adam Tahle -   ]
 
 ### Project Description
 Developping a software system for an organization to offer group and/or private lessons to clients.
