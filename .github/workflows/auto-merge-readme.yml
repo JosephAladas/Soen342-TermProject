@@ -1,0 +1,34 @@
+name: Auto-merge README updates
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  auto_merge_readme:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Check if only README.md was changed
+        run: |
+          # Get the list of changed files
+          CHANGED_FILES=$(git diff --name-only HEAD^ HEAD)
+          
+          # Check if there's only one file changed and it's README.md
+          if [[ "$CHANGED_FILES" == "README.md" ]]; then
+            echo "Only README.md was changed. Proceeding to merge."
+            echo "auto_merge=true" >> $GITHUB_ENV
+          else
+            echo "Files other than README.md changed: $CHANGED_FILES. No auto-merge."
+            echo "auto_merge=false" >> $GITHUB_ENV
+          fi
+
+      - name: Automerge if README.md only
+        if: env.auto_merge == 'true'
+        uses: pascalgn/automerge-action@v0.14.3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
