@@ -1,6 +1,8 @@
 # Soen342-TermProject
 Software Requirements and Deployment Fall 2024 Section H
 
+### Team 18
+
 ### Team Members
 - [Joseph Aladas - 40156616](https://github.com/JosephAladas)
 - [Adam Tahle -   ]
