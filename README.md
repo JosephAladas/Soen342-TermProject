@@ -4,8 +4,12 @@ Software Requirements and Deployment Fall 2024 Section H
 ### Team 18
 
 ### Team Members
-- [Joseph Aladas - 40156616](https://github.com/JosephAladas)
+- [Joseph Aladas - 40156616](https://github.com/JosephAladas) 
 - [Adam Tahle -   ]
+  
+#### Emails
+- joseph.aladas@outlook.com
+- 
 
 ### Project Description
 Developping a software system for an organization to offer group and/or private lessons to clients.
