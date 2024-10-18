@@ -1,0 +1,6 @@
+<!-- offerings_list_partial.html -->
+<ul>
+    {% for offering in offerings %}
+        <li>{{ offering.title }}: {{ offering.description }}</li>
+    {% endfor %}
+</ul>
