@@ -1,3 +1,4 @@
+package code;
 public class Client extends User{
     private Guardian guardian;
 

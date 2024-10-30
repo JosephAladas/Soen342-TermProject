@@ -1,3 +1,4 @@
+package code;
 public class Lesson extends Offering{
     private Instructor instructor;
 

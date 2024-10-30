@@ -1,3 +1,4 @@
+package code;
 public class Offering {
     private Location location;
     private Schedule schedule;
