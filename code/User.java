@@ -2,16 +2,20 @@ package code;
 
 public abstract class User {
     private String name;
-    private UserType type;
     private long phone; 
+    private UserType type;
     private int age;
+    private String username;
+    private String password;
 
     public User (){}
-    public User(String name, long phone, UserType type, int age) {
+    public User(String name, long phone, UserType type, int age, String user, String pass) {
         this.name = name;
         this.phone = phone;
         this.type = type;
         this.age = age;
+        this.username = user;
+        this.password = pass;
     }
 
     public String getName() {
@@ -41,6 +45,21 @@ public abstract class User {
     public void setAge(int age) {
         this.age = age;
     }
-    
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
     
 }

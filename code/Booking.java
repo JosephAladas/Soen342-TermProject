@@ -22,5 +22,8 @@ public class Booking {
         this.client = client;
     }
     
+    public void deleteBooking(Booking booking){
+        booking = null;
+    }
     
 }
