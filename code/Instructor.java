@@ -6,8 +6,8 @@ public class Instructor extends User {
     private String specialization;
     private List<Lesson> lessons;
 
-    public Instructor(String specialization, String name, long phone, UserType type, int age, String user, String pass) {
-        super(name, phone, type, age, user, pass);
+    public Instructor(String specialization, String name, long phone, int age, String user, String pass) {
+        super(name, phone, UserType.INSTRUCTOR, age, user, pass);
         this.specialization = specialization;
         this.lessons = new ArrayList<>();
     }
@@ -24,7 +24,9 @@ public class Instructor extends User {
     public void addLesson(Lesson lesson) {
         if (!lessons.contains(lesson)) { // Avoid duplicate lessons
             lessons.add(lesson);
+            return;
         }
+        System.out.println("Lesson already exists");
     }
 
     // Returns a list of lessons for this instructor

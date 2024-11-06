@@ -6,8 +6,8 @@ public class Client extends User {
     private Guardian guardian;
     private List<Booking> bookings;
 
-    public Client(String name, long phone, UserType type, int age, String user, String pass, Guardian guardian) {
-        super(name, phone, type, age, user, pass);
+    public Client(String name, long phone, int age, String user, String pass, Guardian guardian) {
+        super(name, phone, UserType.CLIENT, age, user, pass);
         this.guardian = guardian;
         this.bookings = new ArrayList<>();
     }

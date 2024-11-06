@@ -11,8 +11,8 @@ public class UserFactory {
         users.put("admin", Admin.getInstance());
 
         // Initialize a sample Client and Instructor
-        Client client = new Client("Alice", 1234567890L, UserType.CLIENT, 28, "clientUser", "clientPass", null);
-        Instructor instructor = new Instructor("Yoga", "Bob", 2345678901L, UserType.INSTRUCTOR, 35, "instructorUser", "instructorPass");
+        Client client = new Client("Alice", 1234567890L, 28, "clientUser", "clientPass", null);
+        Instructor instructor = new Instructor("Yoga", "Bob", 2345678901L, 35, "instructorUser", "instructorPass");
 
         // Add users to the factory
         users.put(client.getUsername(), client);

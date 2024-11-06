@@ -2,8 +2,10 @@ package code;
 public class Guardian extends User {
     private Client client;
     
-    public Guardian(String name, long phone, UserType type, int age, String user, String pass, Client client) {
-        super(name, phone, type, age, user, pass);
+    public Guardian(){}
+
+    public Guardian(String name, long phone, int age, String user, String pass, Client client) {
+        super(name, phone, UserType.GUARDIAN, age, user, pass);
         this.client = client;
     }
 
