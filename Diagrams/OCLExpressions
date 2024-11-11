@@ -1,0 +1,20 @@
+1.	context Offering
+inv uniqueOffering:
+   		 Offering.allInstances()->forAll(o1, o2 | 
+        		o1 <> o2 implies 
+        		(o1.schedule <> o2.schedule or o1.location <> o2.location)
+   		 ) 
+
+2.	context Client
+inv underageClientMustHaveGuardian:
+    		self.age < 18 implies self.guardian->notEmpty()
+
+3.	context Offering
+inv instructorAvailability:
+  	 	self.instructor.availableCities->includes(self.location.city)
+
+4.	context Client
+inv noOverlappingBookings:
+    		self.bookings->forAll(b1, b2 | 
+        			b1 <> b2 implies b1.schedule <> b2.schedule
+    		)
