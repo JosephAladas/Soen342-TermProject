@@ -10,8 +10,8 @@ public class Location {
     public Location(){}
 
     public Location(String name, String city) {
-        this.name = name;
-        this.city = city;
+        this.name = name.toLowerCase();
+        this.city = city.toLowerCase();
         this.offerings = new ArrayList<>();
     }
 
