@@ -270,7 +270,9 @@ public class main {
             b.toString();
         }
     }
+    
     private static void adminViewBookings(){
+        System.out.println("Here is a list of all the clients. For which client would you like to view their bookings? (enter name)");
         for (Map.Entry<Pair<UserType, String>, User> entry : userMap.entrySet()){
             
         }
@@ -279,11 +281,9 @@ public class main {
 
     private static void viewLessons() {
         System.out.println("Viewing lessons...");
-
         for(Lesson l: lessons){
             l.toString();
         }
-
     }
 
     public static boolean signUpClient(String name, long phone, int age, String user, String pass) {
