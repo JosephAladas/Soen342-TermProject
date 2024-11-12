@@ -4,7 +4,7 @@ import java.util.List;
 
 public class Client extends User {
     private Guardian guardian;
-    private List<Booking> bookings;
+    private final List<Booking> bookings;
 
     public Client(String name, long phone, int age, String user, String pass, Guardian guardian) {
         super(name, phone, UserType.CLIENT, age, user, pass);

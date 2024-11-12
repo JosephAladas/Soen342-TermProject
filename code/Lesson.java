@@ -17,6 +17,12 @@ public class Lesson extends Offering{
         this.instructor = instructor;
     }
     
+    @Override
+    public String toString(){
+        System.out.println(instructor.getName() + "Lesson given by:");
+        super.toString(); 
+        return " ";
+    }
     
 
 }

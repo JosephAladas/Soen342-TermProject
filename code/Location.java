@@ -40,4 +40,9 @@ public class Location {
         offerings.add(offering);
         return true; // Offering added successfully
     }
+
+    @Override
+    public String toString(){
+        return this.name + ", " + this.city;
+    }
 }

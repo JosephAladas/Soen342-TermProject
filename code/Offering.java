@@ -56,4 +56,13 @@ public class Offering {
         this.capacity = capacity;
     }
 
+    @Override
+    public String toString(){
+        System.out.println(this.type + " Lesson");
+        System.out.println(this.schedule.getDateTime());
+        System.out.println(this.location.toString());
+        System.out.println(this.mode);
+        System.out.println("Capacity: " + this.capacity);
+        return " ";
+    }
 }

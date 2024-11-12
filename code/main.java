@@ -15,6 +15,7 @@ public class main {
     private static Map<Pair<UserType, String>, User> userMap = new HashMap<>();
     private static List<Location> locations = new ArrayList<>();
     private static List<Offering> offerings = new ArrayList<>();
+    private static List<Lesson> lessons = new ArrayList<>();
 
     public static void main(String[] args) {
         Admin admin = Admin.getInstance(); 
@@ -27,6 +28,7 @@ public class main {
         locations.add(fitnessPlus);
 
         UserType loggedInUserType = null; // To track logged-in user type
+        User loggedInUser = null;
 
         while (true) { 
             System.out.println();
@@ -34,8 +36,10 @@ public class main {
             // Display correct menu based on login status
             if (loggedInUserType == null) {
                 menu();
-            } else {
+            } else if (loggedInUserType == UserType.ADMIN) {
                 adminMenu();
+            } else if (loggedInUserType == UserType.CLIENT) {
+                clientMenu();
             }
             
             String choice = sc.next();
@@ -43,6 +47,11 @@ public class main {
 
             switch (choice) {
                 case "1":
+                //
+                // 
+                // LOG IN
+                //
+                //
                     if (loggedInUserType == null) {
                         // LOG IN logic
                         System.out.print("Enter user type (INSTRUCTOR, CLIENT, or ADMIN): ");
@@ -64,11 +73,15 @@ public class main {
 
                                 if (user.getPassword().equals(password)) {
                                     System.out.println("Login successful!");
+                                    loggedInUser = user;
                                     if (userType == UserType.ADMIN) {
                                         loggedInUserType = UserType.ADMIN;
-                                    } else {
-                                        System.out.println("Welcome " + userType + "!");
-                                    }
+                                    } else if(userType == UserType.CLIENT) {
+                                        loggedInUserType = UserType.CLIENT;
+                                    } else if(userType == UserType.INSTRUCTOR) {
+                                        loggedInUserType = UserType.INSTRUCTOR;
+                                    } 
+                                    System.out.println("Welcome" + user.getName());
                                 } else {
                                     System.out.println("Incorrect password.");
                                 }
@@ -82,7 +95,10 @@ public class main {
                     } else if (loggedInUserType == UserType.ADMIN) {
                         // Admin Menu: Add Offering
                         addOffering(sc);
-                    }
+                    } else if (loggedInUserType == UserType.CLIENT) {
+                        // Admin Menu: Add Offering
+                        clientViewBookings(loggedInUser);
+                    } 
                     break;
                 case "2":
                     if (loggedInUserType == null) {
@@ -90,8 +106,11 @@ public class main {
                         signUp(sc);
                     } else if (loggedInUserType == UserType.ADMIN) {
                         // Admin Menu: View Bookings
-                        viewBookings();
-                    }
+                        adminViewBookings();
+                    } else if (loggedInUserType == UserType.CLIENT) {
+                        // Admin Menu: Add Offering
+                        viewLessons();
+                    } 
                     break;
                 case "3":
                     if (loggedInUserType == null) {
@@ -108,10 +127,13 @@ public class main {
                         System.out.println("Exiting...");
                         sc.close();
                         return;
-                    } else {
-                        // Terminate logic for admin menu
+                    } else if (loggedInUserType == UserType.ADMIN){
                         System.out.println("Exiting admin menu...");
                         loggedInUserType = null;  // Log out from admin menu
+                    } else if (loggedInUserType == UserType.CLIENT){
+                        // Terminate logic for admin menu
+                        System.out.println("Exiting client menu...");
+                        loggedInUserType = null;  // Log out from client menu
                     }
                     break;
                 default:
@@ -135,6 +157,13 @@ public class main {
         System.out.println("2. View Bookings");
         System.out.println("3. View Lessons");
         System.out.println("4. Log out");
+        System.out.print("Choice: ");
+    }
+    private static void clientMenu() {
+        System.out.println("CLIENT MENU");
+        System.out.println("1. View my Bookings");
+        System.out.println("2. View Lessons");
+        System.out.println("3. Log out");
         System.out.print("Choice: ");
     }
 
@@ -233,14 +262,28 @@ public class main {
         System.out.println("Offering added: " + offering);
     }
 
-    private static void viewBookings() {
-        // Logic to view bookings (placeholder)
+    private static void clientViewBookings(User client) {
         System.out.println("Viewing bookings...");
+        Client c = (Client) client;
+        List myBookings = c.getBookings();
+        for(Object b: myBookings){
+            b.toString();
+        }
+    }
+    private static void adminViewBookings(){
+        for (Map.Entry<Pair<UserType, String>, User> entry : userMap.entrySet()){
+            
+        }
+
     }
 
     private static void viewLessons() {
-        // Logic to view lessons (placeholder)
         System.out.println("Viewing lessons...");
+
+        for(Lesson l: lessons){
+            l.toString();
+        }
+
     }
 
     public static boolean signUpClient(String name, long phone, int age, String user, String pass) {

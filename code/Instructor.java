@@ -4,7 +4,7 @@ import java.util.List;
 
 public class Instructor extends User {
     private String specialization;
-    private List<Lesson> lessons;
+    private final List<Lesson> lessons;
 
     public Instructor(String specialization, String name, long phone, int age, String user, String pass) {
         super(name, phone, UserType.INSTRUCTOR, age, user, pass);
@@ -33,5 +33,7 @@ public class Instructor extends User {
     public List<Lesson> getLessons() {
         return new ArrayList<>(lessons);
     }
+
+
 }
 
