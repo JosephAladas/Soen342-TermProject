@@ -8,6 +8,11 @@ public class Lesson extends Offering{
         super(location, schedule, type, mode, capacity);
         this.instructor = instructor;
     }
+    
+    public Lesson(Offering offering, Instructor instructor) {
+        super(offering.getLocation(), offering.getSchedule(), offering.getType(), offering.getMode(), offering.getCapacity());
+        this.instructor = instructor;
+    }
 
     public Instructor getInstructor() {
         return instructor;

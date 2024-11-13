@@ -40,6 +40,8 @@ public class main {
                 adminMenu();
             } else if (loggedInUserType == UserType.CLIENT) {
                 clientMenu();
+            } else if (loggedInUserType == UserType.INSTRUCTOR){
+                instructorMenu();
             }
             
             String choice = sc.next();
@@ -49,7 +51,10 @@ public class main {
                 case "1":
                 //
                 // 
-                // LOG IN
+                // LOG IN - Normal
+                // Add Offering - ADMIN
+                // View Bookings - Client
+                // View Lessons - Instructor
                 //
                 //
                     if (loggedInUserType == null) {
@@ -96,7 +101,14 @@ public class main {
                         addOffering(sc);
                     } else if (loggedInUserType == UserType.CLIENT) {
                         clientViewBookings(loggedInUser, sc);
-                    } 
+                    } else if (loggedInUserType == UserType.INSTRUCTOR) {
+                        Instructor loggedInInstructor = (Instructor)loggedInUser;
+                        List<Lesson> lessons = loggedInInstructor.getLessons();
+                        for(Lesson lesson : lessons){
+                            System.out.println("Lessons you are teaching: ");
+                            System.out.println(lesson.toString());
+                        }
+                    }
                     break;
                 case "2":
                 //
@@ -104,6 +116,7 @@ public class main {
                 // SIGN UP - Normal
                 // View Bookings - ADMIN
                 // Book Lesson - CLIENT 
+                // Vew Offerings - INSTRUCTOR
                 //
                 //
                     if (loggedInUserType == null) {
@@ -113,14 +126,16 @@ public class main {
                     } else if (loggedInUserType == UserType.CLIENT) {
                         Client loggedInClient = (Client) loggedInUser;
                         clientBookLesson(loggedInClient, sc);
-                    } 
+                    } else if (loggedInUserType == UserType.INSTRUCTOR) {
+                        instructorViewOfferings(sc, loggedInUser);
+                    }
                     break;
 
                 //
                 //
                 // View Lessons - Normal
                 // View Lessons - ADMIN
-                // Exit - CLIENT
+                // Exit - CLIENT & INSTRUCTOR
                 //
                 //
                 case "3":
@@ -131,6 +146,10 @@ public class main {
                     } else if (loggedInUserType == UserType.CLIENT){
                         // Terminate logic for client menu
                         System.out.println("Exiting client menu...");
+                        loggedInUserType = null;  // Log out from client menu
+                    } else if (loggedInUserType == UserType.INSTRUCTOR){
+                        // Terminate logic for client menu
+                        System.out.println("Exiting instructor menu...");
                         loggedInUserType = null;  // Log out from client menu
                     }
                     break;
@@ -180,6 +199,13 @@ public class main {
         System.out.println("CLIENT MENU");
         System.out.println("1. View my Bookings");
         System.out.println("2. View Lessons");
+        System.out.println("3. Log out");
+        System.out.print("Choice: ");
+    }
+    private static void instructorMenu() {
+        System.out.println("INSTRUCTOR MENU");
+        System.out.println("1. View my Lessons");
+        System.out.println("2. View Offerings");
         System.out.println("3. Log out");
         System.out.print("Choice: ");
     }
@@ -276,7 +302,7 @@ public class main {
 
         Offering offering = new Offering(location, schedule, type, mode, capacity);
         offerings.add(offering);
-        System.out.println("Offering added: " + offering);
+        System.out.println("Offering added: " + offering.toString());
     }
 
     private static void clientViewBookings(User client, Scanner sc) {
@@ -300,12 +326,12 @@ public class main {
             System.out.println("Lesson Canceled! ");
 
         } else {
-            System.out.println("No lesson booked.");
+            System.out.println("No lesson canceled.");
         }
     }
     
     private static void adminViewBookings(Scanner sc){
-        System.out.println("Here is a list of all the clients. For which client would you like to view their bookings? (enter username)");
+        System.out.println("Here is a list of all the clients. For which client would you like to view their bookings? (enter username or 0 to cancel)");
         for (Map.Entry<Pair<UserType, String>, User> entry : userMap.entrySet()){
             Pair<UserType, String> key = entry.getKey();
             User user = entry.getValue();
@@ -316,6 +342,9 @@ public class main {
             }
             System.out.print("Enter username: ");
             String clientUsername = sc.next();
+            if(clientUsername.equals("0")){
+                return;
+            }
 
             Pair<UserType, String> clientkey = new Pair<>(UserType.CLIENT, clientUsername);
 
@@ -329,6 +358,31 @@ public class main {
             }
         }
 
+    }
+
+    private static void instructorViewOfferings(Scanner sc, User user){
+        System.out.println("Viewing available Offerings: ");
+        int count = 0;
+        Instructor instructor = (Instructor) user;
+        for(Offering offering : offerings){
+            System.out.println(count++ + ". \n" + offering.toString());
+        }
+        System.out.println("Which offering Would you like to take on? (press 0 for no): ");
+        int choice = sc.nextInt();
+        if (choice > 0 && choice <= offerings.size()) {
+            Offering selectedOffering = offerings.get(choice - 1); // Get the lesson at the chosen position
+            System.out.println("You selected: " + selectedOffering.toString());
+
+            System.out.print("Confirm choice (1 for yes, 0 for no): ");
+            choice = sc.nextInt();
+            if(choice == 1){
+                Lesson newLesson = new Lesson(selectedOffering, instructor);
+                lessons.add(newLesson);
+                System.out.println("Lesson added! \n" + newLesson.toString());
+            }
+        } else {
+            System.out.println("No offering chosen.");
+        }
     }
 
     private static void viewLessons() {
