@@ -95,13 +95,15 @@ public class main {
                     } else if (loggedInUserType == UserType.ADMIN) {
                         addOffering(sc);
                     } else if (loggedInUserType == UserType.CLIENT) {
-                        clientViewBookings(loggedInUser);
+                        clientViewBookings(loggedInUser, sc);
                     } 
                     break;
                 case "2":
                 //
                 //
-                // SIGN UP
+                // SIGN UP - Normal
+                // View Bookings - ADMIN
+                // Book Lesson - CLIENT 
                 //
                 //
                     if (loggedInUserType == null) {
@@ -109,9 +111,18 @@ public class main {
                     } else if (loggedInUserType == UserType.ADMIN) {
                         adminViewBookings(sc);
                     } else if (loggedInUserType == UserType.CLIENT) {
-                        viewLessons();
+                        Client loggedInClient = (Client) loggedInUser;
+                        clientBookLesson(loggedInClient, sc);
                     } 
                     break;
+
+                //
+                //
+                // View Lessons - Normal
+                // View Lessons - ADMIN
+                // Exit - CLIENT
+                //
+                //
                 case "3":
                     if (loggedInUserType == null) {
                         viewLessons();
@@ -123,6 +134,12 @@ public class main {
                         loggedInUserType = null;  // Log out from client menu
                     }
                     break;
+
+                //
+                //
+                // Exit - Normal & ADMIN
+                // 
+                //
                 case "4":
                     if (loggedInUserType == null) {
                         // Terminate logic for normal menu
@@ -262,17 +279,33 @@ public class main {
         System.out.println("Offering added: " + offering);
     }
 
-    private static void clientViewBookings(User client) {
+    private static void clientViewBookings(User client, Scanner sc) {
         System.out.println("Viewing bookings...");
         Client c = (Client) client;
-        List myBookings = c.getBookings();
+        List<Booking> myBookings = c.getBookings();
+        int count = 0;
         for(Object b: myBookings){
-            b.toString();
+            System.out.println(count++ + ". \n " + b.toString());
+        }
+        System.out.println("Would you like to cancel a booking (press 0 for no): ");
+        int choice = sc.nextInt();
+
+        // Check if the choice is valid
+        if (choice > 0 && choice <= myBookings.size()) {
+            Booking selectedBooking = myBookings.get(choice - 1); // Get the lesson at the chosen position
+            System.out.println("You selected: " + selectedBooking.getLesson().toString());
+            
+            //cancel booking
+            c.cancelBooking(selectedBooking.getLesson());
+            System.out.println("Lesson Canceled! ");
+
+        } else {
+            System.out.println("No lesson booked.");
         }
     }
     
     private static void adminViewBookings(Scanner sc){
-        System.out.println("Here is a list of all the clients. For which client would you like to view their bookings? (enter name)");
+        System.out.println("Here is a list of all the clients. For which client would you like to view their bookings? (enter username)");
         for (Map.Entry<Pair<UserType, String>, User> entry : userMap.entrySet()){
             Pair<UserType, String> key = entry.getKey();
             User user = entry.getValue();
@@ -287,8 +320,13 @@ public class main {
             Pair<UserType, String> clientkey = new Pair<>(UserType.CLIENT, clientUsername);
 
             User client = userMap.get(clientkey);
-            
-            
+            Client c = (Client)client;
+            System.out.println("Here is a list of client " +client.getUsername() + "'s bookings: " );
+            List<Booking> bookings = c.getBookings();
+            for(Booking b : bookings){
+                System.out.println(b.getLesson().toString());
+                System.out.println();
+            }
         }
 
     }
@@ -296,8 +334,39 @@ public class main {
     private static void viewLessons() {
         System.out.println("Viewing lessons...");
         for(Lesson l: lessons){
-            l.toString();
+            if(l.getCapacity()==0){
+                continue;
+            }
+            System.out.println(l.toString());
         }
+    }
+
+    private static void clientBookLesson(Client currentClient, Scanner sc){
+        System.out.println("Available Lessons: ");
+        int count = 0;
+        for(Lesson l: lessons){
+            if(l.getCapacity()==0){
+                continue;
+            }
+            System.out.println(count++ + ". \n" + l.toString());
+        }
+
+        System.out.print("Which lesson would you like to book (press 0 for none): ");
+        int choice = sc.nextInt();
+
+            // Check if the choice is valid
+        if (choice > 0 && choice <= lessons.size()) {
+            Lesson selectedLesson = lessons.get(choice - 1); // Get the lesson at the chosen position
+            System.out.println("You selected: " + selectedLesson.toString());
+            
+            //create booking
+            currentClient.bookLesson(selectedLesson);
+            System.out.println("Lesson Booked! ");
+
+        } else {
+            System.out.println("No lesson booked.");
+        }
+
     }
 
     public static boolean signUpClient(String name, long phone, int age, String user, String pass) {

@@ -29,6 +29,8 @@ public class Client extends User {
     public boolean bookLesson(Lesson lesson) {
         if (bookings.stream().noneMatch(b -> b.getLesson().equals(lesson))) { // Avoid duplicate bookings
             bookings.add(new Booking(lesson, this));
+            int capacity = lesson.getCapacity();
+            lesson.setCapacity(capacity--);
             return true;
         }
         return false; // Lesson is already booked by the client
@@ -36,6 +38,13 @@ public class Client extends User {
 
     // Cancel a booking for the client
     public boolean cancelBooking(Lesson lesson) {
-        return bookings.removeIf(b -> b.getLesson().equals(lesson)); // Removes the booking if found
+        try {
+            bookings.removeIf(b -> b.getLesson().equals(lesson)); // Removes the booking if found
+            int capacity = lesson.getCapacity();
+            lesson.setCapacity(capacity++);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }
