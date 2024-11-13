@@ -93,32 +93,34 @@ public class main {
                             System.out.println("User not found.");
                         }
                     } else if (loggedInUserType == UserType.ADMIN) {
-                        // Admin Menu: Add Offering
                         addOffering(sc);
                     } else if (loggedInUserType == UserType.CLIENT) {
-                        // Admin Menu: Add Offering
                         clientViewBookings(loggedInUser);
                     } 
                     break;
                 case "2":
+                //
+                //
+                // SIGN UP
+                //
+                //
                     if (loggedInUserType == null) {
-                        // SIGN UP logic
                         signUp(sc);
                     } else if (loggedInUserType == UserType.ADMIN) {
-                        // Admin Menu: View Bookings
-                        adminViewBookings();
+                        adminViewBookings(sc);
                     } else if (loggedInUserType == UserType.CLIENT) {
-                        // Admin Menu: Add Offering
                         viewLessons();
                     } 
                     break;
                 case "3":
                     if (loggedInUserType == null) {
-                        // VIEW LESSONS logic
                         viewLessons();
                     } else if (loggedInUserType == UserType.ADMIN) {
-                        // Admin Menu: View Lessons
                         viewLessons();
+                    } else if (loggedInUserType == UserType.CLIENT){
+                        // Terminate logic for client menu
+                        System.out.println("Exiting client menu...");
+                        loggedInUserType = null;  // Log out from client menu
                     }
                     break;
                 case "4":
@@ -131,9 +133,7 @@ public class main {
                         System.out.println("Exiting admin menu...");
                         loggedInUserType = null;  // Log out from admin menu
                     } else if (loggedInUserType == UserType.CLIENT){
-                        // Terminate logic for admin menu
-                        System.out.println("Exiting client menu...");
-                        loggedInUserType = null;  // Log out from client menu
+                        System.out.println("Choice error.");
                     }
                     break;
                 default:
@@ -271,9 +271,23 @@ public class main {
         }
     }
     
-    private static void adminViewBookings(){
+    private static void adminViewBookings(Scanner sc){
         System.out.println("Here is a list of all the clients. For which client would you like to view their bookings? (enter name)");
         for (Map.Entry<Pair<UserType, String>, User> entry : userMap.entrySet()){
+            Pair<UserType, String> key = entry.getKey();
+            User user = entry.getValue();
+            
+            // Check if the user type is CLIENT
+            if (key.getKey() == UserType.CLIENT) {
+                System.out.println("Client Name: " + user.getUsername());
+            }
+            System.out.print("Enter username: ");
+            String clientUsername = sc.next();
+
+            Pair<UserType, String> clientkey = new Pair<>(UserType.CLIENT, clientUsername);
+
+            User client = userMap.get(clientkey);
+            
             
         }
 
