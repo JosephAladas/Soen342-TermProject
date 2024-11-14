@@ -148,9 +148,9 @@ public class main {
                         System.out.println("Exiting client menu...");
                         loggedInUserType = null;  // Log out from client menu
                     } else if (loggedInUserType == UserType.INSTRUCTOR){
-                        // Terminate logic for client menu
+                        // Terminate logic for instructor menu
                         System.out.println("Exiting instructor menu...");
-                        loggedInUserType = null;  // Log out from client menu
+                        loggedInUserType = null;  // Log out from instructor menu
                     }
                     break;
 
@@ -168,7 +168,7 @@ public class main {
                     } else if (loggedInUserType == UserType.ADMIN){
                         System.out.println("Exiting admin menu...");
                         loggedInUserType = null;  // Log out from admin menu
-                    } else if (loggedInUserType == UserType.CLIENT){
+                    } else if (loggedInUserType == UserType.CLIENT || loggedInUserType == UserType.INSTRUCTOR){
                         System.out.println("Choice error.");
                     }
                     break;
@@ -403,6 +403,10 @@ public class main {
                 continue;
             }
             System.out.println(count++ + ". \n" + l.toString());
+        }
+        if(currentClient.getAge() <18){
+            System.out.println("You are underage, please have your guardian book a lesson for you! ");
+            return;
         }
 
         System.out.print("Which lesson would you like to book (press 0 for none): ");
