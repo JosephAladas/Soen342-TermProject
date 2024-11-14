@@ -26,4 +26,8 @@ public class Booking {
         booking = null;
     }
     
+    @Override
+    public String toString(){
+        return lesson.toString();
+    }
 }

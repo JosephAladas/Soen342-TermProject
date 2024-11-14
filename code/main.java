@@ -27,6 +27,45 @@ public class main {
         locations.add(marseille);
         locations.add(fitnessPlus);
 
+        Client joseph = new Client("joseph", 514, 24, "Joseph", "123", null);
+        Client john = new Client("john", 514, 24, "john", "123", null);
+        Client adam = new Client("adam", 514, 24, "adam", "123", null);
+        Instructor joe = new Instructor("yoga", "joe", 444, 44, "joe", "joe");
+        userMap.put(new Pair<>(UserType.CLIENT, joseph.getUsername()), joseph);
+        userMap.put(new Pair<>(UserType.CLIENT, john.getUsername()), john);
+        userMap.put(new Pair<>(UserType.CLIENT, adam.getUsername()), adam);
+        userMap.put(new Pair<>(UserType.INSTRUCTOR, joe.getUsername()), joe);
+
+        Offering offering1 = new Offering(
+            new Location("Room 101", "Building A"), 
+            new Schedule(LocalDateTime.of(2024, 11, 20, 9, 0)), // 2024-11-20 at 09:00 AM
+            "Yoga", 
+            LessonMode.GROUP, 
+            25
+        );
+        offerings.add(offering1);
+
+        Offering offering2 = new Offering(
+            new Location("Gymnasium", "Building B"), 
+            new Schedule(LocalDateTime.of(2024, 11, 22, 18, 0)), // 2024-11-22 at 06:00 PM
+            "Pilates", 
+            LessonMode.GROUP, 
+            15
+        );
+        offerings.add(offering2);
+
+        Offering offering3 = new Offering(
+            new Location("Studio 5", "Building C"), 
+            new Schedule(LocalDateTime.of(2024, 11, 24, 13, 0)), // 2024-11-24 at 01:00 PM
+            "Kickboxing", 
+            LessonMode.GROUP, 
+            30
+        );
+
+        Lesson lesson1 = new Lesson(offering3, joe);
+        joe.addLesson(lesson1);
+        lessons.add(lesson1);
+
         UserType loggedInUserType = null; // To track logged-in user type
         User loggedInUser = null;
 
@@ -103,9 +142,9 @@ public class main {
                         clientViewBookings(loggedInUser, sc);
                     } else if (loggedInUserType == UserType.INSTRUCTOR) {
                         Instructor loggedInInstructor = (Instructor)loggedInUser;
-                        List<Lesson> lessons = loggedInInstructor.getLessons();
-                        for(Lesson lesson : lessons){
-                            System.out.println("Lessons you are teaching: ");
+                        List<Lesson> instructorlessons = loggedInInstructor.getLessons();
+                        System.out.println("Lessons you are teaching: ");
+                        for(Lesson lesson : instructorlessons){
                             System.out.println(lesson.toString());
                         }
                     }
@@ -302,7 +341,8 @@ public class main {
 
         Offering offering = new Offering(location, schedule, type, mode, capacity);
         offerings.add(offering);
-        System.out.println("Offering added: " + offering.toString());
+        System.out.println("\nOffering added: ");
+        System.out.println(offering.toString());
     }
 
     private static void clientViewBookings(User client, Scanner sc) {
@@ -311,7 +351,8 @@ public class main {
         List<Booking> myBookings = c.getBookings();
         int count = 0;
         for(Object b: myBookings){
-            System.out.println(count++ + ". \n " + b.toString());
+            System.out.println(++count);
+            System.out.println(b.toString());
         }
         System.out.println("Would you like to cancel a booking (press 0 for no): ");
         int choice = sc.nextInt();
@@ -319,10 +360,13 @@ public class main {
         // Check if the choice is valid
         if (choice > 0 && choice <= myBookings.size()) {
             Booking selectedBooking = myBookings.get(choice - 1); // Get the lesson at the chosen position
-            System.out.println("You selected: " + selectedBooking.getLesson().toString());
+            System.out.println("You selected: ");
+            System.out.println(selectedBooking.getLesson().toString());
             
             //cancel booking
             c.cancelBooking(selectedBooking.getLesson());
+            int cap = selectedBooking.getLesson().getCapacity() + 1;
+            selectedBooking.getLesson().setCapacity(cap);
             System.out.println("Lesson Canceled! ");
 
         } else {
@@ -365,7 +409,9 @@ public class main {
         int count = 0;
         Instructor instructor = (Instructor) user;
         for(Offering offering : offerings){
-            System.out.println(count++ + ". \n" + offering.toString());
+            System.out.println();
+            System.out.println(++count + ".");
+            System.out.println(offering.toString());
         }
         System.out.println("Which offering Would you like to take on? (press 0 for no): ");
         int choice = sc.nextInt();
@@ -378,6 +424,8 @@ public class main {
             if(choice == 1){
                 Lesson newLesson = new Lesson(selectedOffering, instructor);
                 lessons.add(newLesson);
+                offerings.remove(selectedOffering);
+                instructor.addLesson(newLesson);
                 System.out.println("Lesson added! \n" + newLesson.toString());
             }
         } else {
@@ -402,7 +450,8 @@ public class main {
             if(l.getCapacity()==0){
                 continue;
             }
-            System.out.println(count++ + ". \n" + l.toString());
+            System.out.println(++count);
+            System.out.println(l.toString());
         }
         if(currentClient.getAge() <18){
             System.out.println("You are underage, please have your guardian book a lesson for you! ");
@@ -415,10 +464,13 @@ public class main {
             // Check if the choice is valid
         if (choice > 0 && choice <= lessons.size()) {
             Lesson selectedLesson = lessons.get(choice - 1); // Get the lesson at the chosen position
-            System.out.println("You selected: " + selectedLesson.toString());
+            System.out.println("You selected: ");
+            System.out.println(selectedLesson.toString());
             
             //create booking
             currentClient.bookLesson(selectedLesson);
+            int newCapacity = selectedLesson.getCapacity() - 1;
+            selectedLesson.setCapacity(newCapacity);
             System.out.println("Lesson Booked! ");
 
         } else {

@@ -24,7 +24,9 @@ public class Lesson extends Offering{
     
     @Override
     public String toString(){
-        System.out.println(instructor.getName() + "Lesson given by:");
+        System.out.println();
+        System.out.println( "Lesson given by:");
+        System.out.println(instructor.getName());
         super.toString(); 
         return " ";
     }
