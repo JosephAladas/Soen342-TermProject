@@ -376,33 +376,48 @@ public class main {
     
     private static void adminViewBookings(Scanner sc){
         System.out.println("Here is a list of all the clients. For which client would you like to view their bookings? (enter username or 0 to cancel)");
+        
+        // Iterate over the userMap entries
         for (Map.Entry<Pair<UserType, String>, User> entry : userMap.entrySet()){
             Pair<UserType, String> key = entry.getKey();
             User user = entry.getValue();
             
             // Check if the user type is CLIENT
             if (key.getKey() == UserType.CLIENT) {
-                System.out.println("Client Name: " + user.getUsername());
-            }
-            System.out.print("Enter username: ");
-            String clientUsername = sc.next();
-            if(clientUsername.equals("0")){
-                return;
-            }
-
-            Pair<UserType, String> clientkey = new Pair<>(UserType.CLIENT, clientUsername);
-
-            User client = userMap.get(clientkey);
-            Client c = (Client)client;
-            System.out.println("Here is a list of client " +client.getUsername() + "'s bookings: " );
-            List<Booking> bookings = c.getBookings();
-            for(Booking b : bookings){
-                System.out.println(b.getLesson().toString());
-                System.out.println();
+                System.out.println("Client Name: " + key.getValue()); // Print client username
             }
         }
-
+    
+        System.out.print("Enter username: ");
+        String clientUsername = sc.next();
+        if (clientUsername.equals("0")) {
+            return; // Exit if user inputs '0'
+        }
+    
+        // Create a key to find the client
+        Pair<UserType, String> clientKey = new Pair<>(UserType.CLIENT, clientUsername);
+        User client = userMap.get(clientKey);
+    
+        // Check if the client exists in the map
+        if (client != null && client instanceof Client) {
+            Client c = (Client) client;
+            System.out.println("Here is a list of client " + client.getUsername() + "'s bookings:");
+            List<Booking> bookings = c.getBookings();
+            
+            // Check if there are any bookings
+            if (bookings != null && !bookings.isEmpty()) {
+                for (Booking b : bookings) {
+                    System.out.println(b.getLesson().toString());
+                    System.out.println();
+                }
+            } else {
+                System.out.println("No bookings found for this client.");
+            }
+        } else {
+            System.out.println("Client not found.");
+        }
     }
+    
 
     private static void instructorViewOfferings(Scanner sc, User user){
         System.out.println("Viewing available Offerings: ");
@@ -450,7 +465,7 @@ public class main {
             if(l.getCapacity()==0){
                 continue;
             }
-            System.out.println(++count);
+            System.out.print(++count);
             System.out.println(l.toString());
         }
         if(currentClient.getAge() <18){
